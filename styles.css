@@ -40,6 +40,12 @@ select optgroup{font-weight:800}
 .topic-controls{display:grid;gap:13px;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--surface2)}
 .control-note{margin:0;color:var(--muted);font-size:11px;line-height:1.45}
 :is([data-theme=aurora],[data-theme=cosmic],[data-theme=tropical],[data-theme=peach],[data-theme=golden]) .topic-controls{background:var(--soft-gradient);border-color:color-mix(in srgb,var(--accent) 24%,var(--line))}
+.formula-intro{margin-top:18px;padding:15px 17px;border-left:4px solid var(--accent);border-radius:10px;background:var(--surface2)}
+.formula-intro p{margin:4px 0 0;color:var(--muted);line-height:1.5;font-size:14px}
+.formula-grid section{border:1px solid var(--line)}
+.formula-grid .formula-use{font-family:inherit;color:var(--muted);font-weight:700;line-height:1.45}
+.formula-grid .formula-main{font-size:18px;font-weight:700;color:var(--accent);padding:8px 0}
+.formula-grid .formula-example{font-family:inherit;background:var(--surface2);border-radius:8px;padding:9px;line-height:1.45}
 
 @media(max-width:600px){
   body{padding-bottom:env(safe-area-inset-bottom);-webkit-text-size-adjust:100%}

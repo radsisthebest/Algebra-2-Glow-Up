@@ -55,9 +55,13 @@ function generatedTopicQuestion(topic,i){
     let squareFree=[2,3,5,6,7,10,11,13,14,15,17,19][i%12],coefficient=2+i,radicand=coefficient*coefficient*squareFree;
     return{...base,prompt:`Simplify √${radicand}.`,answer:[`${coefficient}√${squareFree}`,`${coefficient}sqrt(${squareFree})`,`${coefficient}sqrt${squareFree}`],lesson:"Find the largest perfect-square factor, take its square root outside, and leave the square-free factor inside.",explanation:`${radicand}=${coefficient*coefficient}·${squareFree}, so √${radicand}=${coefficient}√${squareFree}.`,mistake:"Radical simplification"};
   }
-  if(topic==="Exponentials & Logs"){
+  if(topic==="Exponential Functions"){
     let exponent=2+i,baseNum=2+i%3,value=baseNum**exponent;
-    return{...base,prompt:`Solve ${baseNum}ˣ = ${value}.`,answer:[String(exponent),`x=${exponent}`],lesson:"Write both sides with the same base. When equal bases are raised to equal values, their exponents match.",explanation:`${value}=${baseNum}^${exponent}, so x=${exponent}.`,mistake:"Exponent rule error"};
+    return{...base,prompt:`Solve ${baseNum}ˣ = ${value}.`,answer:[String(exponent),`x=${exponent}`],lesson:"This is exponential because x is in the exponent. Write both sides with the same base, then set the exponents equal.",explanation:`${value}=${baseNum}^${exponent}, so x=${exponent}.`,mistake:"Exponent rule error"};
+  }
+  if(topic==="Logarithms"){
+    let exponent=2+i,baseNum=2+i%4,value=baseNum**exponent;
+    return{...base,prompt:`Evaluate log base ${baseNum} of ${value}.`,answer:[String(exponent),`log_${baseNum}(${value})=${exponent}`],lesson:`A logarithm asks “what exponent?” Rewrite log base ${baseNum} of ${value}=x as ${baseNum}ˣ=${value}.`,explanation:`${baseNum}^${exponent}=${value}, so log base ${baseNum} of ${value}=${exponent}.`,mistake:"Logarithm meaning error"};
   }
   if(topic==="Sequences"){
     let first=3+i,difference=2+i%6,term=6+i,answer=first+(term-1)*difference;
