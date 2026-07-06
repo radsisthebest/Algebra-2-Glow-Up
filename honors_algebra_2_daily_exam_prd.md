@@ -233,6 +233,8 @@ In the custom-topic dropdown, this combined curriculum area must appear as two s
 
 Selecting one must never generate questions from the other.
 
+The app must not use a combined **Exponentials & Logs** topic label in the active question bank. Starter, adaptive, and custom-generated questions should label exponential-only questions as **Exponential Functions** and logarithm-only questions as **Logarithms**.
+
 Example question types:
 - Solve \(3 \cdot 2^x = 48\)
 - Convert \(\log_2 32 = 5\) to exponential form
