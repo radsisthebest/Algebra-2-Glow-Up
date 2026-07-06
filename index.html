@@ -15,11 +15,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <header class="topbar">
-    <button class="brand" data-view="home" aria-label="Go home"><span>∿</span> Algebra 2 Glow-Up <small id="appVersion">v13</small></button>
+    <button class="brand" data-view="home" aria-label="Go home"><span>∿</span> Algebra 2 Glow-Up <small id="appVersion">v14</small></button>
     <nav>
       <button class="nav-link active" data-view="home">Home</button>
       <button class="nav-link" data-view="dashboard">Progress</button>
@@ -86,6 +86,7 @@
         </div>
         <div class="today-box"><span id="focusLabel">Today’s adaptive focus</span><strong id="todayFocus">Diagnostic mix</strong><small id="dayLabel">Day 1 • 10 questions • 30 minutes</small></div>
         <button class="primary wide" type="submit">Start today’s exam <span>→</span></button>
+        <button class="soft wide hidden" type="button" id="resumeExam">Resume saved test <span>→</span></button>
         <p class="fine-print">Practice timer: 30 minutes. Your work saves automatically.</p>
       </form>
     </section>
@@ -153,6 +154,6 @@
     </div>
   </dialog>
   <div id="toast" role="status"></div>
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>

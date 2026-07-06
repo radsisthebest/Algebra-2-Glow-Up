@@ -337,6 +337,8 @@ The selected mode and custom topic settings should be stored locally. Results mu
 
 The app should show a small visible version label in the header so the student can confirm whether the newest GitHub Pages update has loaded. Service worker registration should be versioned when app files change, and the page should refresh once when a new service worker takes control.
 
+If a student chooses **Save & exit** during a test, the Home setup card must show a clear **Resume saved test** button. The button should only appear when a saved draft exists, and it should restore the saved questions, answers, timer, and current question position.
+
 Each exam should be designed for exactly **30 minutes**.
 
 ### Recommended Question Count
