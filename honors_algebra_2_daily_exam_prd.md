@@ -341,6 +341,8 @@ If a student chooses **Save & exit** during a test, the Home setup card must sho
 
 The Home setup card should also include a **Make printable worksheet** option. It should generate a clean worksheet for either Adaptive Mix or the selected single topic. For Adaptive Mix, the worksheet uses the fixed adaptive question count. For single-topic practice, it uses the selected topic and typed question amount. The worksheet should include blank answer space, multiple-choice options when needed, and an answer key on a separate printed page. The worksheet view should have a print button and print-friendly styling that hides the app navigation and gradient interface.
 
+When **Choose one topic** is selected, the setup controls should include a difficulty dropdown with **Warm-up**, **Easy**, **Medium**, and **Honors**. The selected difficulty applies to single-topic tests and single-topic printable worksheets. Adaptive Mix keeps its own mixed difficulty behavior.
+
 Each exam should be designed for exactly **30 minutes**.
 
 ### Recommended Question Count
