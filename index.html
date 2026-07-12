@@ -15,11 +15,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=43">
+  <link rel="stylesheet" href="styles.css?v=44">
 </head>
 <body>
   <header class="topbar">
-    <button class="brand" data-view="home" aria-label="Go home"><span>∿</span> Algebra 2 Glow-Up <small id="appVersion">v43</small></button>
+    <button class="brand" data-view="home" aria-label="Go home"><span>∿</span> Algebra 2 Glow-Up <small id="appVersion">v44</small></button>
     <nav>
       <button class="nav-link active" data-view="home">Home</button>
       <button class="nav-link" data-view="dashboard">Progress</button>
@@ -178,6 +178,18 @@
     </section>
   </main>
 
+  <dialog id="signOutModal" class="confirm-modal">
+    <div class="modal-head">
+      <div><p class="kicker">SIGN OUT</p><h2>Are you sure?</h2></div>
+      <button class="icon-button" id="cancelSignOut" aria-label="Close">×</button>
+    </div>
+    <p class="confirm-copy">You’ll leave this account on this device. Any saved local practice stays in this browser.</p>
+    <div class="modal-actions">
+      <button class="soft" type="button" id="staySignedIn">Stay signed in</button>
+      <button class="primary danger-action" type="button" id="confirmSignOut">Yes, sign out</button>
+    </div>
+  </dialog>
+
   <dialog id="formulaModal">
     <div class="modal-head"><div><p class="kicker">QUICK REFERENCE</p><h2>Formula sheet</h2></div><button class="icon-button" id="closeFormula" aria-label="Close">×</button></div>
     <div class="formula-intro"><strong>How to use this sheet</strong><p>Find the topic, read “Use it when…,” then copy the example with your question’s numbers. Opening this sheet never lowers your score.</p></div>
@@ -197,7 +209,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-functions-compat.js"></script>
-  <script src="firebase-config.js?v=43"></script>
-  <script src="app.js?v=43"></script>
+  <script src="firebase-config.js?v=44"></script>
+  <script src="app.js?v=44"></script>
 </body>
 </html>
