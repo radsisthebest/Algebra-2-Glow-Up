@@ -26,7 +26,17 @@ function save(){localStorage.setItem(KEY,JSON.stringify(data))}
 function normalize(v){return String(v??"").toLowerCase().replace(/\s/g,"").replace(/[−–]/g,"-").replace(/[₀-₉]/g,c=>"₀₁₂₃₄₅₆₇₈₉".indexOf(c))}
 function questionKey(q){return normalize(`${q.topic}|${q.prompt}`)}
 function rememberQuestionSet(questions){data=shapeData(data);let keys=data.generatorLog.usedPromptKeys,seen=new Set(keys);questions.forEach(q=>{let key=questionKey(q);if(!seen.has(key)){keys.push(key);seen.add(key)}});data.generatorLog.usedPromptKeys=keys.slice(-5000);save()}
-function isCorrect(q,a){return Array.isArray(q.answer)?q.answer.some(x=>normalize(x)===normalize(a)):normalize(q.answer)===normalize(a)}
+function logFormKey(value){
+  let s=String(value??"").toLowerCase().replace(/[₂₃₄₅₆₇₈₉₀₁]/g,c=>"₀₁₂₃₄₅₆₇₈₉".indexOf(c)).replace(/equals/g,"=").replace(/\s+/g," ").trim();
+  let patterns=[
+    /log\s*[_ ]?\s*(\d+)\s*\(?\s*(\d+)\s*\)?\s*=\s*(\d+)/,
+    /log\s*base\s*(?:of\s*)?(\d+)\s*(?:of\s*)?(\d+)\s*=\s*(\d+)/,
+    /log\s*(\d+)\s*(?:of\s*)?(\d+)\s*=\s*(\d+)/
+  ];
+  for(let p of patterns){let m=s.match(p);if(m)return `${m[1]}|${m[2]}|${m[3]}`}
+  return "";
+}
+function isCorrect(q,a){let answers=Array.isArray(q.answer)?q.answer:[q.answer];if(q.topic==="Logarithms"){let userLog=logFormKey(a);if(userLog&&answers.some(x=>logFormKey(x)===userLog))return true}return answers.some(x=>normalize(x)===normalize(a))}
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 function grade(p){return p>=93?"A":p>=90?"A−":p>=87?"B+":p>=83?"B":p>=80?"B−":p>=77?"C+":p>=73?"C":p>=70?"C−":p>=60?"Needs review":"Reteach needed"}
 function showView(name){$$(".view").forEach(v=>v.classList.add("hidden"));$(`#${name}View`).classList.remove("hidden");$$("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===name));if(name==="dashboard")renderDashboard();if(name==="admin")renderAdmin();if(name==="home")updateResumeButton();scrollTo(0,0)}
@@ -229,12 +239,44 @@ function coachReply(q,text){
   if(/check|my answer|correct/.test(t))return`I can help you check the method without judging the final answer yet. Tell me what your first step was, then compare it with this hint: ${q.lesson}`;
   return`I’m an offline coach, so I’m best at questions about this ${q.topic} problem. Here’s the key idea: ${q.lesson}\n\nTry asking “explain it simpler,” “show another example,” “what’s the first step?”, or “walk me through it.”`;
 }
+function wantsFullCoachSolution(text){return /answer|walk.?through|solve it|full solution/.test(text.toLowerCase())}
+function buildCoachPrompt(q,userText,messages){
+  let recent=(messages||[]).slice(-8).map(m=>`${m.role==="bot"?"Tutor":"Student"}: ${m.text}`).join("\n");
+  return `You are Algebra 2 Glow-Up's friendly math tutor for a student.
+Explain clearly, step by step, in a kind beginner-friendly voice.
+Do not shame the student. Keep the answer focused on Algebra 2.
+If the student asks for the answer, you may walk through it, but emphasize understanding.
+Use plain text, not LaTeX-heavy formatting.
+
+Current problem:
+Topic: ${q.topic}
+Difficulty: ${q.difficulty}
+Question: ${q.prompt}
+Correct answer: ${Array.isArray(q.answer)?q.answer[0]:q.answer}
+Built-in lesson: ${q.lesson}
+Built-in explanation: ${q.explanation}
+
+Recent chat:
+${recent || "No prior chat yet."}
+
+Student asks: ${userText}`;
+}
+async function realCoachReply(q,text,messages){
+  if(!functionsApi||!authUser)return coachReply(q,text);
+  try{
+    let res=await callFn("generateWithOpenAI",{prompt:buildCoachPrompt(q,text,messages)});
+    return (res?.outputText||"").trim()||coachReply(q,text);
+  }catch(error){
+    console.warn("AI coach fallback:",error);
+    return `${coachReply(q,text)}\n\n(P.S. The real AI coach could not connect, so I used the offline backup.)`;
+  }
+}
 function renderCoach(){
   let q=exam.questions[exam.index],messages=exam.chats?.[q.id]||[];
-  $("#lesson").innerHTML=`<div class="coach-head"><div><h3>✦ Offline Study Coach</h3><small>${q.topic} • ask as many follow-ups as you need</small></div><button class="coach-close" type="button" aria-label="Close coach">×</button></div><div class="coach-messages">${messages.map(m=>`<div class="coach-message coach-${m.role}">${escapeHtml(m.text)}</div>`).join("")}</div><div class="coach-quick"><button type="button" data-coach="Explain it simpler">Explain it simpler</button><button type="button" data-coach="What's the first step?">First step</button><button type="button" data-coach="Show another example">Another example</button><button type="button" data-coach="Walk me through it">Full walkthrough</button></div><form class="coach-form"><input id="coachInput" aria-label="Ask the Study Coach" placeholder="Ask a follow-up question…" autocomplete="off"><button>Send</button></form><p class="coach-note">Works offline. It knows this lesson and common follow-ups, but it is not a general internet AI.</p>`;
+  $("#lesson").innerHTML=`<div class="coach-head"><div><h3>✦ AI Study Coach</h3><small>${q.topic} • ask as many follow-ups as you need</small></div><button class="coach-close" type="button" aria-label="Close coach">×</button></div><div class="coach-messages">${messages.map(m=>`<div class="coach-message coach-${m.role}">${escapeHtml(m.text)}</div>`).join("")}</div><div class="coach-quick"><button type="button" data-coach="Explain it simpler">Explain it simpler</button><button type="button" data-coach="What's the first step?">First step</button><button type="button" data-coach="Show another example">Another example</button><button type="button" data-coach="Walk me through it">Full walkthrough</button></div><form class="coach-form"><input id="coachInput" aria-label="Ask the Study Coach" placeholder="Ask a follow-up question…" autocomplete="off"><button>Send</button></form><p class="coach-note">Uses the real AI coach when online. If the API is not ready, it falls back to the offline coach.</p>`;
   $("#lesson").classList.remove("hidden");$(".coach-close").onclick=()=>$("#lesson").classList.add("hidden");$(".coach-form").onsubmit=e=>{e.preventDefault();sendCoach($("#coachInput").value)};$$("[data-coach]").forEach(b=>b.onclick=()=>sendCoach(b.dataset.coach));let box=$(".coach-messages");box.scrollTop=box.scrollHeight;
 }
-function sendCoach(text){if(!text.trim())return;let q=exam.questions[exam.index];exam.chats??={};exam.chats[q.id]??=[];exam.chats[q.id].push({role:"user",text:text.trim()});exam.chats[q.id].push({role:"bot",text:coachReply(q,text)});data.draft=exam;save();renderCoach()}
+async function sendCoach(text){if(!text.trim())return;let q=exam.questions[exam.index],clean=text.trim();if(wantsFullCoachSolution(clean)){exam.assisted??={};exam.assisted[q.id]=true}exam.chats??={};exam.chats[q.id]??=[];exam.chats[q.id].push({role:"user",text:clean});let pending={role:"bot",text:"Thinking through this with you…"};exam.chats[q.id].push(pending);data.draft=exam;save();renderCoach();let reply=await realCoachReply(q,clean,exam.chats[q.id].filter(m=>m!==pending));pending.text=reply;data.draft=exam;save();renderCoach()}
 function teach(){let q=exam.questions[exam.index];exam.hints[q.id]=true;exam.chats??={};exam.chats[q.id]??=[{role:"bot",text:`Let’s work on this together. ${q.lesson}\n\nWhat part feels confusing? You can keep asking until it makes sense.`}];data.draft=exam;save();renderCoach()}
 function startTimer(){clearInterval(timerId);updateTimer();timerId=setInterval(()=>{exam.seconds--;data.draft=exam;if(exam.seconds%10===0)save();updateTimer();if(exam.seconds<=0){clearInterval(timerId);finishExam(true)}},1000)}
 function updateTimer(){let m=Math.floor(exam.seconds/60),s=exam.seconds%60;$("#timer strong").textContent=`${m}:${String(s).padStart(2,"0")}`;$("#timer").classList.toggle("urgent",exam.seconds<300)}
