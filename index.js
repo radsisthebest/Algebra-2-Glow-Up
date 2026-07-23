@@ -11,7 +11,7 @@ const PREMIUM_MODEL = defineString("PREMIUM_OPENAI_MODEL", { default: "gpt-5.6" 
 
 const ADMIN_EMAILS = new Set([
   "radhikatchandra@outlook.com",
-  "radhikachandra809@gmail.com",
+  "radhika.t.chandra13@gmail.com",
   "ranveer.chandra@gmail.com"
 ]);
 

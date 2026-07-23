@@ -18,6 +18,6 @@ window.FIREBASE_CONFIG = {
 
 window.APP_ADMIN_EMAILS = [
   "radhikatchandra@outlook.com",
-  "radhikachandra809@gmail.com",
+  "radhika.t.chandra13@gmail.com",
   "ranveer.chandra@gmail.com"
 ];

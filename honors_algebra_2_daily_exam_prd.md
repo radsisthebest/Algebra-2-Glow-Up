@@ -1191,7 +1191,7 @@ The app should support two account types:
 The following emails must always be treated as premium:
 
 - `radhikatchandra@outlook.com`
-- `radhikachandra809@gmail.com`
+- `radhika.t.chandra13@gmail.com`
 - `ranveer.chandra@gmail.com`
 
 These same emails should also be administrator accounts.
